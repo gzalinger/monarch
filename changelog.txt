@@ -1,0 +1,36 @@
+=================================================
+Version 8 October 2020
+
+RELEASE NOTES
+This version makes a number of changes to the MVP. First, there are a set of sundry and 'quality of life changes.' For instance, military units now automatically advnace with frontiers and entire armies can be moved at once when they destroy the last stronghold on a lane (and the monarch is present when the sortie finishes). Upgrading the capital also gives more purse space and modest movement speed bonuses. Cities now cannot be built too close to each other or the capital.
+
+The second set of changes slow growth and resources in the late game. Soldiers and workers become more expensive as more are bought. There is also a new 'housing' mechanic which slows population growth if the monarch controls too many subjects relative to their cities and territory.
+
+Lastly, gold mines have been introduced. These are the sisters of farms; they generate money and also can only be built in certain places. They produce gold much faster than farms (especially if many workers are assigned) but eventually run out and produce nothing.
+
+ALL CHANGES
+- slightly tweaked harvest and pop growth times so they don't like up with the end of days
+- reduced default difficulty level (from 1.5 to 1.35 after 7 days)
+- gave a healthy boost to purse sizes for levels 3-5
+- fixed bug in which farms created too many fields from local farmers when upgraded
+- each capital upgrade grants +5% movement speed
+- stronghold strengths scales at only 80% of danger level
+- military units automatically advance when a new node is captured
+- cost of workers and soldiers now increases based on the number of soldiers and workers already controlled by the monarch (0.5gp per worker, 0.25gp per soldier)
+- 'victorious army'
+  - if the monarch is present when a sortie wins and has no downstream strongholhds, they gain a victorious army as a special retinue, containing all military units at the sortie location
+  - this special retinue does not count towards retinue cap and cannot be added to or subtracted from
+  - it can dropped at one location within the monarch's location, at which point it dissolves and the subjects in it act normally again
+- arable land is now tracked in maps (and set by MapGen)
+- when a node is lost, only 1/3 of civilians (min of 1) are killed
+- cities cannot be built within 2 nodes of another city or capital
+- rebalanced wall costs and defense ratings
+- added gold mines
+- added 'kingdom overview' to gui, toggled with 'k'
+- added housing system to curb population growth in the later game
+  - housing comes from open nodes (w/ no settlements), cities, and the capital
+  - when the kingdom's population is too high relative to its housing, all pop growth slows
+
+
+=================================================
+*MVP: October 1, 2020

@@ -1,0 +1,3 @@
+javac gui/*.java
+javac core/*.java
+javac *.java

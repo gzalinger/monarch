@@ -1,0 +1,31 @@
+- REPRODUCE: lost soldier when node was destroyed from walking off it
+- put all code on github
+- reduce nightly variance in attacks at each frontier
+- more farms
+
+
+
+EVENTUALLY
+- player should be able to pick from maps and difficulty settings in main menu
+- use different gold icons to show general amount
+- center text label under node control buttons
+- let player see attack history at a frontier
+- use penant image when monarch is traveling
+- show benefits of next upgrade somewhere
+- combat bonus from monarch being present
+- should wall levels be tied to capital upgrades?
+- (maybe) cities shouldn't produce new idle citizens when there are too there already
+- penalties for monarch moving around outside walls at night
+- clean up image icon fields in node control panel (maybe a dictionary?)
+- lull in attacks after losing a node
+- would be nice to have a way to train & recruit to ret in one step
+- text for building farm, city, etc with costs overlaps in control panel
+- (maybe) show how much defense comes from soldiers vs walls
+- losing a frontier when you move off with ret is too fragile
+- don't have farms adjacent to other farms
+- total housing cap should be tracked, not constantly recalculated
+- when placing a farm b/c there weren't any close enough, don't put it adjacenr to a farm which is just out of range
+- show breakdown of housing sources in kindgom overview
+- make construction progress wheel match color of workers
+- add walls beyond level 5
+- consider setting a max price for soldiers
