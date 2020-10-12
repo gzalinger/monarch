@@ -24,8 +24,8 @@ public class Main implements GUICallbackManager {
 
 	// ===============================================
 
-	public void newGame() {
-		currentGame = new GameInstance();
+	public void newGame(DifficultyLevel dl, int mapDifficulty, int mapSize) {
+		currentGame = new GameInstance(dl, mapDifficulty, mapSize);
 		gui.onNewGameStart();
 		
 		// Start the game engine:

@@ -7,7 +7,7 @@ import java.io.Serializable;
 public class Sortie implements Serializable {
 
 	public static final double DISTANCE_PENALTY = 0.05; // percent strength penalty per extra distance from target
-	private static final double CASAULTIES_PER_DAY = 5.2; // if a sortie fights all day, it will lose this many soldiers
+	private static final double BASE_CASAULTIES_PER_DAY = 5.2; // if a sortie fights all day, it will lose this many soldiers
 	private MapNode location; // where it was launched from
 	private Stronghold target;
 	private int distanceToTarget;
@@ -49,12 +49,18 @@ public class Sortie implements Serializable {
 			instance.sortieVictory(this);
 		}
 
-		nextCasaultyProgress += progress * CASAULTIES_PER_DAY;
+		nextCasaultyProgress += progress * getCurrentCasaultyRate(instance);
 		if (nextCasaultyProgress >= 1.0) {
 			nextCasaultyProgress = 0.0;
 			instance.inflictSortieCasaulty(this);
 			casaultyCount++;
 		}
+	}
+
+	// ================================
+
+	private double getCurrentCasaultyRate(GameInstance instance) {
+		return BASE_CASAULTIES_PER_DAY + 0.04 * target.getStrength(instance);
 	}
 
 	// ======== ACCESSORS =============

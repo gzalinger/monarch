@@ -13,7 +13,7 @@ public interface GUICallbackManager {
 	public void loadGame();
 
 
-	public void newGame();
+	public void newGame(DifficultyLevel dl, int mapDifficulty, int mapSize);
 
 
 	public void saveGame();

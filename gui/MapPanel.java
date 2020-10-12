@@ -40,12 +40,15 @@ public class MapPanel extends JComponent {
 	private boolean isKingdomViewOpen;
 
 	static {
-		wallIcons = new ImageIcon[5];
+		wallIcons = new ImageIcon[8];
 		wallIcons[0] = new ImageIcon("images/wall1.png");
 		wallIcons[1] = new ImageIcon("images/wall2.png");
 		wallIcons[2] = new ImageIcon("images/wall3.png");
 		wallIcons[3] = new ImageIcon("images/wall4.png");
 		wallIcons[4] = new ImageIcon("images/wall5.png");
+		wallIcons[5] = new ImageIcon("images/wall6.png");
+		wallIcons[6] = new ImageIcon("images/wall7.png");
+		wallIcons[7] = new ImageIcon("images/wall8.png");
 	}
 
 

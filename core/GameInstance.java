@@ -16,18 +16,19 @@ public class GameInstance implements Serializable {
 	public static final double NIGHT_TO_DAY_RATIO = 0.666; // length of night compared to day
 	private static final double MARGINAL_EQUIP_COST_WORKER = 0.5; // how much more each costs than the last
 	private static final double MARGINAL_EQUIP_COST_SOLDIER = 0.25;
+	private static final int MAX_SOLDIER_EQUIP_COST = 15;
 	private static final int[] purseSizes = new int[]{20, 25, 35, 45, 60}; // limits on what the monarch can carry
 	private static final int[] retinueLimits = new int[]{3, 4, 5, 6, 8};
 	private static final double[] monarchMoveSpeedBonuses = new double[]{0.0, 0.0, 0.05, 0.1, 0.15}; // confered by capital level
-	private static final double HOUSING_PER_OPEN_NODE = 0.5; // housing capacity of a human-controlled node with no settlement
+	private static final double HOUSING_PER_OPEN_NODE = 0.25; // housing capacity of a human-controlled node with no settlement
 	private static final int CITY_EXCLUSION_DISTANCE = 2; // distance that must be between cities
 	private GameState state; // the model in MVC
 	private Double monarchMovementDirection;
 
 
-	public GameInstance() {
+	public GameInstance(DifficultyLevel dl, int mapDifficulty, int mapSize) {
 		//state = new GameState(Map.getDefaultMap(), DifficultyLevel.getDefault());
-		state = new GameState(MapGen.createMap(), DifficultyLevel.getDefault());
+		state = new GameState(this, MapGen.createMap(mapDifficulty, mapSize), dl);
 		monarchMovementDirection = new Double(0, 0);
 		init();
 	}
@@ -256,7 +257,7 @@ public class GameInstance implements Serializable {
 			}
 			double danger = state.getDangerLevel();
 			// random variance:
-			danger = danger * (0.8 + Math.random()*0.4);
+			danger = danger * (0.9 + Math.random()*0.2);
 
 			state.addFrontierAttack(new FrontierAttack(node, (int)Math.round(danger)));
 		}
@@ -521,7 +522,7 @@ public class GameInstance implements Serializable {
 		MapNode parentNode = node.getParent();
 		int newFrontierCount = 1;
 		for (MapNode child: parentNode.getChildren()) {
-			if (child != node && !state.isNodeCaptured(child)) {
+			if (child != node && !state.isNodeCaptured(child) && hasDownstreamStronghold(child)) {
 				newFrontierCount++;
 			}
 		}
@@ -1009,6 +1010,9 @@ public class GameInstance implements Serializable {
 		// workers and soldiers get more expensive the more the player controls:
 		if (subjectType == SubjectType.SOLDIER) {
 			cost += (int)(MARGINAL_EQUIP_COST_SOLDIER * state.getTotalKingdomPopulation(subjectType));
+			if (cost > MAX_SOLDIER_EQUIP_COST) {
+				cost = MAX_SOLDIER_EQUIP_COST;
+			}
 		}
 		else if (subjectType == SubjectType.WORKER) {
 			cost += (int)(MARGINAL_EQUIP_COST_WORKER * state.getTotalKingdomPopulation(subjectType));
@@ -1090,9 +1094,10 @@ public class GameInstance implements Serializable {
 
 	// =================================
 
-	public static int determineGoldVeinAmount() {
+	public static int determineGoldVeinAmount(int depth) {
 		// decides how much gold is in a particualr vein
-		return 60 + (int)(Math.random() * 60);
+		// arg is depth of vein's location from root
+		return 60 + (int)(Math.random() * 60) + 3 * depth;
 	}
 
 	// =================================

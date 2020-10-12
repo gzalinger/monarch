@@ -7,30 +7,32 @@ import java.util.LinkedList;
 
 public class MapGen {
 
-	private static final int MAX_LANE_DEPTH = 15;
-	private static final int MIN_LANE_DEPTH = 8; // they can be shorter if they twist into dead ends
-	private static final double LANE_END_CHANCE = 0.21; // this controls how long lanes tend to be between the limits above
-	private static final double FORK_CHANCE = 0.17; // how often should a lane split?
-	private static final double DOUBLE_FORK_CHANCE = 0.03; // how often should a lane split into 3 children?
+	private static final int[] MAX_LANE_DEPTH = new int[]{9, 14, 21};
+	private static final int[] MIN_LANE_DEPTH = new int[]{6, 8, 12}; // they can be shorter if they twist into dead ends
+	private static final double[] LANE_END_CHANCE = new double[]{0.5, 0.25, 0.1}; // this controls how long lanes tend to be between the limits above
+	private static final double[] FORK_CHANCE = new double[]{0.1, 0.15, 0.22}; // how often should a lane split?
+	private static final double[] DOUBLE_FORK_CHANCE = new double[]{0.0, 0.03, 0.07}; // how often should a lane split into 3 children?
 	private static final double CORNER_CHANCE = 0.07; // how often lanes should change directions
+	private static final int[] NUM_PEDDLERS = new int[]{6, 4, 3};
 	private static final int MIN_PEDDLER_DEPTH = 3;
 	private static final int MAX_PEDDLER_DEPTH = 8;
 	private static final double PEDDLER_CHANCE = 0.35; // chance of a peddler being located on each node between min and max
 	private static final int MIN_STRONGHOLD_DEPTH = 7; // intemrediate strongholds shouldn't be closer than this
 	private static final double STRONGHOLD_CHANCE = 0.1;
+	private static final double[] NUM_STRONGHOLD_MOD = new double[]{0.75, 1.0, 1.5};
 	private static final int MIN_ECON_SPACING = 2; // a 2 here means they can't be adjcanet
-	private static final int MAX_ECON_SPACING = 12; // spacing between economic resources (farms and gold veins)
-	private static final double ECON_FREQUENCY = 0.2; // frequency of econ resources among nodes
-	private static final double ECON_PERCENTAGE_FARMS = 0.5; // percentage of econ resources which are farms
+	private static final int[] MAX_ECON_SPACING = new int[]{8, 12, 14}; // spacing between economic resources (farms and gold veins)
+	private static final double[] ECON_FREQUENCY = new double[]{0.25, 0.2, 0.175}; // frequency of econ resources among nodes
+	private static final double ECON_PERCENTAGE_FARMS = 0.6; // percentage of econ resources which are farms
 
 
 
-	public static Map createMap() {
+	public static Map createMap(int difficulty, int size) {
 		Map map = new Map();
 		MapNode root = new MapNode(0, 0);
 		map.setRootNode(root);
 		
-		int rootLanes = calculateNumRootLanes();
+		int rootLanes = calculateNumRootLanes(difficulty);
 		LinkedList<MapNode> creationQueue = new LinkedList<MapNode>(); // list of nodes that still need their descendants worked out
 		LinkedList<Double> rootLaneDirs = shuffle(getCardinalDirections());
 		for (int i = 0; i < rootLanes; i++) {
@@ -41,33 +43,33 @@ public class MapGen {
 
 		// start recursing on creationQueue:
 		while (creationQueue.size() > 0) {
-			generateFromNode(map, creationQueue.removeFirst(), creationQueue);
+			generateFromNode(map, creationQueue.removeFirst(), creationQueue, difficulty, size);
 		}
 		map.makeNodeList(); // map is now fully built
 
 		// put some stuff on it:
-		addPeddlers(map);
-		addStrongholds(map);
-		addFarmsAndGoldVeins(map);
+		addPeddlers(map, difficulty);
+		addStrongholds(map, difficulty);
+		addFarmsAndGoldVeins(map, difficulty);
 
 		return map;
 	}
 
 	// ========================================
 
-	private static void generateFromNode(Map map, MapNode node, LinkedList<MapNode> queue) {
+	private static void generateFromNode(Map map, MapNode node, LinkedList<MapNode> queue, int difficulty, int mapSize) {
 		// create children of this node and add them to the back of the queue
 		int depth = Map.getDistance(node, map.getRootNode());
 
 		// First, determine if this is a leaf:
-		if (depth >= MAX_LANE_DEPTH) {
+		if (depth >= MAX_LANE_DEPTH[mapSize]) {
 			return;
 		}
-		else if (depth > MIN_LANE_DEPTH && Math.random() < LANE_END_CHANCE) {
+		else if (depth > MIN_LANE_DEPTH[mapSize] && Math.random() < LANE_END_CHANCE[mapSize]) {
 			return;
 		}
 
-		int numChildren = calculateNumChildrenForNode();
+		int numChildren = calculateNumChildrenForNode(difficulty);
 		for (int i = 0; i < numChildren; i++) {
 			Double loc = findLocationForChild(map, node); // looks for a valid location
 			if (loc != null) {
@@ -138,13 +140,17 @@ public class MapGen {
 
 	// ========================================
 
-	private static int calculateNumRootLanes() {
+	private static int calculateNumRootLanes(int difficulty) {
 		// Decide how many lanes should radiate from root
+		double[] twoLaneChances = new double[]{1.0, 1.0, 0.7, 0.3, 0.0};
+		double[] threeLaneChances = new double[]{0.0, 0.0, 0.27, 0.55, 0.5};
+		// remaining percentage is for 4 lanes
+
 		double r = Math.random();
-		if (r < 0.7) {
+		if (r < twoLaneChances[difficulty]) {
 			return 2;
 		}
-		else if (r < 0.97) {
+		else if (r < threeLaneChances[difficulty]) {
 			return 3;
 		}
 		else {
@@ -175,12 +181,12 @@ public class MapGen {
 
 	// ========================================
 
-	private static int calculateNumChildrenForNode() {
+	private static int calculateNumChildrenForNode(int difficulty) {
 		// How many children should some random node try to have, assuming there is space for them:
-		if (Math.random() < DOUBLE_FORK_CHANCE) {
+		if (Math.random() < DOUBLE_FORK_CHANCE[difficulty]) {
 			return 3;
 		}
-		if (Math.random() < FORK_CHANCE) {
+		if (Math.random() < FORK_CHANCE[difficulty]) {
 			return 2;
 		}
 		return 1;
@@ -188,8 +194,8 @@ public class MapGen {
 
 	// ========================================
 
-	private static void addPeddlers(Map map) {
-		int numPeddlers = 3 + (int)(Math.random() * 3);
+	private static void addPeddlers(Map map, int difficulty) {
+		int numPeddlers = NUM_PEDDLERS[difficulty];
 		int numRootLanes = map.getRootNode().getChildren().size();
 		int i = 0;
 		// Apportion the peddlers evenly along the lanes:
@@ -241,10 +247,10 @@ public class MapGen {
 
 	// ========================================
 
-	private static void addStrongholds(Map map) {
+	private static void addStrongholds(Map map, int difficulty) {
 		// places intermediate strongholds on the map
 		LinkedList<MapNode> leaves = map.getLeaves();
-		int numStrongholds = (int)Math.round(leaves.size() * (0.25 +Math.random() * 0.5));
+		int numStrongholds = (int)Math.round(leaves.size() * (0.25 +Math.random() * 0.5) * NUM_STRONGHOLD_MOD[difficulty]);
 		for (int i = 0; i < numStrongholds; i++) {
 			placeStrongholdOnLane(map, leaves.get(i).getParent());
 		}
@@ -265,10 +271,10 @@ public class MapGen {
 
 	// ========================================
 
-	private static void addFarmsAndGoldVeins(Map map) {
+	private static void addFarmsAndGoldVeins(Map map, int difficulty) {
 		// Both are placed at the same time b/c they fill similar roles
 		for (MapNode child: map.getRootNode().getChildren()) {
-			addFarmsAndGoldVeinsToLane(map, child, 1);
+			addFarmsAndGoldVeinsToLane(map, child, 1, difficulty);
 		}
 
 		// make sure there is at least one farm or gold vein within 4 nodes of the root:
@@ -303,11 +309,11 @@ public class MapGen {
 
 	// ========================================
 
-	private static void addFarmsAndGoldVeinsToLane(Map map, MapNode node, int depthFromLastEcon) {
+	private static void addFarmsAndGoldVeinsToLane(Map map, MapNode node, int depthFromLastEcon, int difficulty) {
 		// First, determine if an econ resources will be placed here:
 		boolean placed = false;
 		if (node.getChildren().size() > 0 && !map.getStrongholdLocations().contains(node) && !map.getPeddlerLocations().contains(node)) {
-			if (depthFromLastEcon >= MAX_ECON_SPACING) {
+			if (depthFromLastEcon >= MAX_ECON_SPACING[difficulty]) {
 				placed = true;
 				if (Math.random() < ECON_PERCENTAGE_FARMS) {
 					map.addArableLand(node);
@@ -317,7 +323,7 @@ public class MapGen {
 				}
 			}
 			else if (depthFromLastEcon > MIN_ECON_SPACING) {
-				if (Math.random() <= ECON_FREQUENCY) {
+				if (Math.random() <= ECON_FREQUENCY[difficulty]) {
 					placed = true;
 					if (Math.random() < ECON_PERCENTAGE_FARMS) {
 						map.addArableLand(node);
@@ -331,7 +337,7 @@ public class MapGen {
 
 		// Now recurse.
 		for (MapNode child: node.getChildren()) {
-			addFarmsAndGoldVeinsToLane(map, child, placed ? 1 : depthFromLastEcon + 1);
+			addFarmsAndGoldVeinsToLane(map, child, placed ? 1 : depthFromLastEcon + 1, difficulty);
 		}
 	}
 

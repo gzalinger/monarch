@@ -6,10 +6,10 @@ import java.io.Serializable;
 
 public class Wall implements Serializable {
 
-	public static final int MAX_LEVEL = 5;
-	private static int[] constructionAndUpgradeCosts = new int[]{4, 6, 16, 24, 40};
-	private static double[] constructionTimes = new double[]{0.20, 0.6, 1.2, 1.6, 2.5};
-	private static int[] defenseRatings = new int[]{6, 12, 24, 38, 54};
+	public static final int MAX_LEVEL = 8;
+	private static int[] constructionAndUpgradeCosts = new int[]{4, 6, 16, 24, 40, 50, 50, 50};
+	private static double[] constructionTimes = new double[]{0.20, 0.6, 1.2, 1.6, 2.5, 2.7, 3.0, 3.4};
+	private static int[] defenseRatings = new int[]{6, 12, 24, 38, 54, 72, 88, 102};
 	private int level;
 	private boolean isBuildingSite;
 	private boolean isUpgrading;

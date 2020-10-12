@@ -7,8 +7,8 @@ import java.awt.Color;
 public enum PopGrowthModifier {
 
 	GREEN(Color.GREEN, 1.0, 0.0),
-	YELLOW(Color.YELLOW, 0.8, 0.75),
-	RED(Color.RED, 0.5, 1.0),
+	YELLOW(Color.YELLOW, 0.8, 0.8),
+	RED(Color.RED, 0.4, 1.0),
 	BLACK(Color.BLACK, 0.05, 1.2);
 
 

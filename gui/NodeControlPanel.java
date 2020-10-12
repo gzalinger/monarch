@@ -285,8 +285,9 @@ public class NodeControlPanel extends JPanel {
 			// images and labels which are context specific
 			if (info.label != null) {
 				g.setColor(Color.BLACK);
-				g.setFont(new Font("foo", Font.PLAIN, 11));
-				g.drawString(info.label, 38 + i * 114, 101);
+				g.setFont(new Font("foo", Font.PLAIN, 10));
+				int labelWidth = g.getFontMetrics().stringWidth(info.label);
+				g.drawString(info.label, 66 + i * 116 - labelWidth / 2, 101);
 			}
 		}
 

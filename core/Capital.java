@@ -9,7 +9,7 @@ public class Capital extends Settlement implements Serializable {
 	private static double[] upgradeTimes = new double[]{0.0, 0.0, 1.0, 1.5, 2.5}; // worker-days required to reach different levels
 	private static int[] upgradeCosts = new int[]{0, 0, 36, 60, 100};
 	private static int[] treasurySizes = new int[]{50, 75, 125, 200, 500}; // how much gold the capital can hold
-	private static int[] housingCapacities = new int[]{6, 8, 14, 20, 30};
+	private static int[] housingCapacities = new int[]{8, 10, 16, 22, 32};
 	private double nextSubjectProgress; // how close it is to producing another subject
 
 

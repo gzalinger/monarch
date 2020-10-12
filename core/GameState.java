@@ -38,7 +38,7 @@ public class GameState implements Serializable {
 	private HashMap<MapNode, Integer> goldVeins; // int portion is the amount of gold in them
 
 
-	public GameState(Map m, DifficultyLevel d) {
+	public GameState(GameInstance instance, Map m, DifficultyLevel d) {
 		map = m;
 		difficulty = d;
 		exploredNodes = new HashMap<MapNode, Boolean>();
@@ -59,7 +59,7 @@ public class GameState implements Serializable {
 		sorties = new LinkedList<Sortie>();
 		goldVeins = new HashMap<MapNode, Integer>();
 		for (MapNode n: map.getGoldVeins()) {
-			goldVeins.put(n, GameInstance.determineGoldVeinAmount());
+			goldVeins.put(n, GameInstance.determineGoldVeinAmount(map.getDistance(n, map.getRootNode())));
 		}
 	}
 

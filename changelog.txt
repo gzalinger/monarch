@@ -2,7 +2,21 @@
 *Current version
 
 ALL CHANGES
--
+- reduced per-attack nightly variation from danger level from +/-20% to +/-10%
+- increased proportion of farms (vice mines) from 50% to 60%
+- soldier equipment cost maxes out at 15gp
+- walls now go to level 8
+- danger level now increases by same amount every day; first week is not different any more
+- reduced "red" pop growth from 50% to 40%
+- open nodes now provide only 0.25 housing (down from 0.5)
+- gold veins have 3 additional gold for each node they are from the root
+- increased housing provided by capital by 2
+- armies will not split when advancing from a fork where the other branch has been cleared
+- more powerful strongholds inflict sortie casualties more quickly (+1/day per 25 strength)
+- yellow housing level threshold raised to 80% full
+
+
+
 
 =================================================
 Version 8 October 2020

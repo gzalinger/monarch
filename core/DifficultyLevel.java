@@ -6,18 +6,20 @@ package core;
 public enum DifficultyLevel {
 
 
-	EASY("Easy", 0.9, 1.35);
+	TRIVIAL("Trivial", 0.75),
+	EASY("Easy", 1.0),
+	MODERATE("Moderate", 1.3),
+	HARD("Hard", 1.5),
+	INSANE("Insane", 2.0);
 
 
 	private String displayName;
-	private double earlyDailyIncrease; // how much danger level goes up each day (in the early game)
-	private double midDailyIncrease;
+	private double dailyIncrease;
 
 
-	private DifficultyLevel(String s, double d1, double d2) {
+	private DifficultyLevel(String s, double d) {
 		displayName = s;
-		earlyDailyIncrease = d1;
-		midDailyIncrease = d2;
+		dailyIncrease = d;
 	}
 
 	// ====================================
@@ -35,12 +37,7 @@ public enum DifficultyLevel {
 	// ====================================
 
 	public double getDailyDangerIncrease(int dayCount) {
-		if (dayCount <= 5) {
-			return earlyDailyIncrease;
-		}
-		else {
-			return midDailyIncrease;
-		}
+		return dailyIncrease;
 	}
 
 }
