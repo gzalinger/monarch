@@ -10,7 +10,7 @@ public class City extends Settlement implements Serializable {
 	private static int[] buildingAndUpgradingCosts = new int[]{16, 12, 22, 30, 60};
 	private static double[] constructionTimes = new double[]{1.0, 2.0, 2.5, 3.5, 5.0}; // unit is worker-days
 	private static int[] treasurySizes = new int[]{20, 50, 75, 120, 180};
-	private static int[] housingCapacities = new int[]{4, 8, 12, 16, 22};
+	private static int[] housingCapacities = new int[]{4, 6, 10, 14, 20};
 	private double nextSubjectProgress; // how close it is to producing another subject
 
 
@@ -28,6 +28,7 @@ public class City extends Settlement implements Serializable {
 			if (constructionProgress >= 1.0) {
 				constructionProgress = 0.0;
 				isBuildingSite = false;
+				instance.onBuildingSiteFinished(this);
 			}
 		}
 

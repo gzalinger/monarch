@@ -1,5 +1,12 @@
 =================================================
-*Current version
+Version 15 October 2020
+
+RELEASE NOTES
+This version includes a number of small fixes and balance changes, incuding a cap on soldier prices, walls that go 
+up to level 8, and improved army-splitting behavior around forks that include cleared lanes.
+
+The biggest change is to the main menu, where players now have the ability to customize maps and difficulty levels.
+
 
 ALL CHANGES
 - reduced per-attack nightly variation from danger level from +/-20% to +/-10%
@@ -14,8 +21,13 @@ ALL CHANGES
 - armies will not split when advancing from a fork where the other branch has been cleared
 - more powerful strongholds inflict sortie casualties more quickly (+1/day per 25 strength)
 - yellow housing level threshold raised to 80% full
-
-
+- refactored NodeControlPanel to pull details portion (the right) into a separate JComponent
+- player can now select map size, map difficulty (number of forks, strongholds, and resources), and enemy difficulty (rate of danger level increase) when starting a new game
+- refactored housing calculations so that it is tracked rather than constantly being recalculated
+- kingdom overview shows breakdown of housing sources
+- increased cost of level 4 and 5 capital upgrades
+- slightly decreased housing from cities
+- reduced treasury size of level 2 and 3 farms
 
 
 =================================================

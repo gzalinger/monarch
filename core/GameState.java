@@ -36,6 +36,7 @@ public class GameState implements Serializable {
 	private Population specialRetinue; // a group of subjects following the monarch but different from normal retinue
 	private String specialRetinueName;
 	private HashMap<MapNode, Integer> goldVeins; // int portion is the amount of gold in them
+	private HousingTracker housingTracker;
 
 
 	public GameState(GameInstance instance, Map m, DifficultyLevel d) {
@@ -61,6 +62,7 @@ public class GameState implements Serializable {
 		for (MapNode n: map.getGoldVeins()) {
 			goldVeins.put(n, GameInstance.determineGoldVeinAmount(map.getDistance(n, map.getRootNode())));
 		}
+		housingTracker = new HousingTracker();
 	}
 
 	// ===================================================
@@ -285,6 +287,10 @@ public class GameState implements Serializable {
 		return difficulty;
 	}
 
+	public LinkedList<FrontierAttack> getFrontierAttacks() {
+		return attacks;
+	}
+
 	public boolean getGameResult() {
 		return gameResult;
 	}
@@ -296,8 +302,8 @@ public class GameState implements Serializable {
 		return goldVeins.get(node).intValue();
 	}
 
-	public LinkedList<FrontierAttack> getFrontierAttacks() {
-		return attacks;
+	public HousingTracker getHousingTracker() {
+		return housingTracker;
 	}
 
 	public Map getMap() {

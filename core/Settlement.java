@@ -64,6 +64,7 @@ public abstract class Settlement implements Serializable {
 				isUpgrading = false;
 				level++;
 				onUpgradeFinished(parent);
+				parent.onSettlementUpgradeFinished(this);
 			}
 		}
 

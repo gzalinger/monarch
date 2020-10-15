@@ -3,6 +3,7 @@
 package core;
 import java.awt.geom.Point2D.Double;
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.LinkedList;
 
 
@@ -20,7 +21,6 @@ public class GameInstance implements Serializable {
 	private static final int[] purseSizes = new int[]{20, 25, 35, 45, 60}; // limits on what the monarch can carry
 	private static final int[] retinueLimits = new int[]{3, 4, 5, 6, 8};
 	private static final double[] monarchMoveSpeedBonuses = new double[]{0.0, 0.0, 0.05, 0.1, 0.15}; // confered by capital level
-	private static final double HOUSING_PER_OPEN_NODE = 0.25; // housing capacity of a human-controlled node with no settlement
 	private static final int CITY_EXCLUSION_DISTANCE = 2; // distance that must be between cities
 	private GameState state; // the model in MVC
 	private Double monarchMovementDirection;
@@ -83,6 +83,8 @@ public class GameInstance implements Serializable {
 				}
 			}
 		}
+
+		state.getHousingTracker().recalculate(this);
 	}
 
 	// =================================
@@ -209,6 +211,9 @@ public class GameInstance implements Serializable {
 
 		// Look for downstream nodes that have been cut off as a result:
 		loseAllDownstreamNodes(target);
+
+		// update housing:
+		state.getHousingTracker().recalculate(this);
 	}
 
 	// =================================
@@ -517,6 +522,7 @@ public class GameInstance implements Serializable {
 		if (oldSettlement instanceof Peddler) {
 			state.removeSettlementAt(node);
 		}
+		state.getHousingTracker().recalculate(this);
 
 		// move up military units:
 		MapNode parentNode = node.getParent();
@@ -606,6 +612,7 @@ public class GameInstance implements Serializable {
 		// success:
 		state.addMonarchGold(-1 * City.getCost(1));
 		state.addSettlement(new City(), node);
+		state.getHousingTracker().recalculate(this); // b/c there is one less open node
 	}
 
 	// =================================
@@ -630,6 +637,7 @@ public class GameInstance implements Serializable {
 		// success:
 		state.addMonarchGold(-1 * Farm.getCost(1));
 		state.addSettlement(new Farm(), node);
+		state.getHousingTracker().recalculate(this); // b/c there is one less open node
 	}
 
 	// =================================
@@ -649,6 +657,7 @@ public class GameInstance implements Serializable {
 		// success:
 		state.addMonarchGold(-1 * GoldMine.getCost());
 		state.addSettlement(new GoldMine(), node);
+		state.getHousingTracker().recalculate(this); // b/c there is one less open node
 	}
 
 	// =================================
@@ -1041,7 +1050,7 @@ public class GameInstance implements Serializable {
 	}
 
 	// =================================
-
+	/*
 	public int getTotalHousingCapacity() {
 		double capacity = 0;
 		// add a little for open nodes:
@@ -1058,12 +1067,12 @@ public class GameInstance implements Serializable {
 		}
 
 		return (int)Math.round(capacity);
-	}
+	}*/
 
 	// =================================
 
 	public PopGrowthModifier getPopGrowthModifier() {
-		return PopGrowthModifier.getCurrentModifier((double)state.getTotalKingdomPopulation().getTotal() / getTotalHousingCapacity());
+		return PopGrowthModifier.getCurrentModifier((double)state.getTotalKingdomPopulation().getTotal() / state.getHousingTracker().getTotal());
 	}
 
 	// =================================
@@ -1106,6 +1115,22 @@ public class GameInstance implements Serializable {
 		state.decrementGoldInVein(state.findLocationOfSettlement(g));
 	}
 
+	// =================================
+
+	public void onSettlementUpgradeFinished(Settlement settlement) {
+		if (settlement instanceof City || settlement instanceof Capital) {
+			state.getHousingTracker().recalculate(this);
+		}
+	}
+
+	// =================================
+
+	public void onBuildingSiteFinished(Settlement settlement) {
+		if (settlement instanceof City) {
+			state.getHousingTracker().recalculate(this);
+		}
+	}
+
 	// =========== ACCESSORS ==============
 
 	public MapNode findLocationOfSettlement(Settlement s) {
@@ -1114,6 +1139,10 @@ public class GameInstance implements Serializable {
 
 	public MapNode findLocationOfStronghold(Stronghold s) {
 		return state.findLocationOfStronghold(s);
+	}
+
+	public Collection<Settlement> getAllSettlements() {
+		return state.getAllSettlements();
 	}
 
 	public FrontierAttack getAttackAtNode(MapNode node) {
@@ -1211,6 +1240,10 @@ public class GameInstance implements Serializable {
 
 	public Stronghold getStrongholdAt(MapNode node) {
 		return state.getStrongholdAt(node);
+	}
+
+	public HousingTracker getHousingTracker() {
+		return state.getHousingTracker();
 	}
 
 	public Population getTotalKingdomPopulation() {

@@ -437,14 +437,23 @@ public class MapPanel extends JComponent {
 			g.drawString("Population:", 4, y);
 			y += 8;
 			paintPopulation(g, instance.getTotalKingdomPopulation(), 6, y);
-			y += 46;
+			y += 38;
 		
-			g.drawString("Housing: " + instance.getTotalKingdomPopulation().getTotal() + " / " + instance.getTotalHousingCapacity(), 6, y);
+			HousingTracker tracker = instance.getHousingTracker();
+			g.drawString("Housing: " + instance.getTotalKingdomPopulation().getTotal() + " / " + tracker.getTotal(), 6, y);
 			y += 14;
 			PopGrowthModifier mod = instance.getPopGrowthModifier();
 			g.drawString("Growth rate: " + (int)(100 * mod.getGrowthMod()) + "%", 27, y);
 			g.setColor(mod.getColor());
 			g.fillRect(12, y - 6, 8, 8);
+			y += 14;
+
+			g.setColor(Color.BLACK);
+			g.drawString("Housing at capital: " + tracker.getCapitalHousing(), 16, y);
+			y += 14;
+			g.drawString("Housing at cities: " + tracker.getCitiesHousing(), 16, y);
+			y += 14;
+			g.drawString("Housing from undeveloped land: " + tracker.getOpenNodeHousing(), 16, y);
 		}
 	}
 

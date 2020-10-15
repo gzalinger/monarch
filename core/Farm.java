@@ -9,7 +9,7 @@ public class Farm extends Settlement implements Serializable {
 
 	private static int[] buildingAndUpgradingCosts = new int[]{10, 12, 18};
 	private static double[] constructionTimes = new double[]{0.5, 1.0, 1.5}; // unit is worker-days
-	private static int[] maxGold = new int[]{25, 45, 80};
+	private static int[] maxGold = new int[]{25, 32, 40};
 	private static int[] maxFarmers = new int[]{3, 4, 5}; // how many can be employed at once
 	private static int[] harvestYields = new int[]{5, 6, 7}; // amount of gold per farmer when their farming is done
 	private ArrayList<Double> cropProgress; // tracks progress of each "field" towards its harvest
@@ -31,6 +31,7 @@ public class Farm extends Settlement implements Serializable {
 				constructionProgress = 0.0;
 				isBuildingSite = false;
 				assignFarmersToFields(instance);
+				instance.onBuildingSiteFinished(this);
 			}
 		}
 		else {

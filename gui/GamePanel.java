@@ -24,8 +24,14 @@ public class GamePanel extends MyContentPanel {
 		mapPanel = new MapPanel(g, w, h - topHeight - bottomHeight - 2);
 		add(mapPanel);
 		add(new GUIRectangle(w, 1, Color.BLACK));
-		controlPanel = new NodeControlPanel(g, w, bottomHeight);
-		add(controlPanel);
+		JPanel bottom = new JPanel();
+		bottom.setPreferredSize(new Dimension(w, bottomHeight));
+		bottom.setLayout(new BoxLayout(bottom, BoxLayout.X_AXIS));
+		controlPanel = new NodeControlPanel(g, w - 291, bottomHeight);
+		bottom.add(controlPanel);
+		bottom.add(new GUIRectangle(1, bottomHeight, Color.BLACK));
+		bottom.add(new NodeDetailPanel(g, 290, bottomHeight));
+		add(bottom);
 	}
 
 	// ==================================

@@ -26,6 +26,7 @@ public class GoldMine extends Settlement {
 			if (constructionProgress >= 1.0) {
 				constructionProgress = 0.0;
 				isBuildingSite = false;
+				instance.onBuildingSiteFinished(this);
 			}
 		}
 		else {

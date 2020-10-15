@@ -1,5 +1,3 @@
-- PLAYTEST: use map difficulty and size params in MapGen
-
 
 
 EVENTUALLY
@@ -17,9 +15,8 @@ EVENTUALLY
 - would be nice to have a way to train & recruit to ret in one step
 - (maybe) show how much defense comes from soldiers vs walls
 - losing a frontier when you move off with ret is too fragile
-- total housing cap should be tracked, not constantly recalculated
 - when placing a farm b/c there weren't any close enough, don't put it adjacenr to a farm which is just out of range
-- show breakdown of housing sources in kindgom overview
 - make construction progress wheel match color of workers
 - handle victorious armies when monarch is not there when sortie finishes
 - three digit subject counts in node detail panel are obscured
+- acheivements that are tracked over time

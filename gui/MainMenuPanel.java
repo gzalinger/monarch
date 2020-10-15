@@ -32,7 +32,7 @@ public class MainMenuPanel extends MyContentPanel implements ActionListener {
 		panel.add(enemyDiffComboBox);
 		add(panel);
 
-		add(new GUIRectangle(w, 12));
+		add(new GUIRectangle(w, 8));
 		panel = new JPanel();
 		panel.add(new JLabel("Map difficulty:"));
 		mapDiffComboBox = new JComboBox(new String[]{"Easy", "Moderate", "Hard"});
@@ -40,7 +40,7 @@ public class MainMenuPanel extends MyContentPanel implements ActionListener {
 		panel.add(mapDiffComboBox);
 		add(panel);
 
-		add(new GUIRectangle(w, 12));
+		add(new GUIRectangle(w, 8));
 		panel = new JPanel();
 		panel.add(new JLabel("Map size:"));
 		mapSizeComboBox = new JComboBox(new String[]{"Small", "Medium", "Large"});
